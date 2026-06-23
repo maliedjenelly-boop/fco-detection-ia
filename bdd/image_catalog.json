@@ -1,0 +1,758 @@
+[
+  {
+    "fichier": "healthy_train_0000.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0001.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0002.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0003.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0004.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0005.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0006.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0007.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0008.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0009.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0010.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0011.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0012.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0013.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0014.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_train_0015.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0001.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0002.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0004.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0005.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0007.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0009.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0012.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0013.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0014.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0016.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0018.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0019.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0020.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0026.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0027.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0028.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0031.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0033.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0034.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0036.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0038.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0040.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0041.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0042.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0043.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0044.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0045.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0046.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0047.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0048.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0050.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0054.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0056.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0060.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0061.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0063.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0065.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0066.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0067.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0068.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "mild_train_0070.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "moderate_train_0003.png",
+    "classe": "malade",
+    "severite": "moderate",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0000.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0001.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0002.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0003.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0004.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0005.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0006.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0007.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0008.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0009.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0010.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0011.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0012.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0013.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0014.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "severe_train_0015.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "train"
+  },
+  {
+    "fichier": "healthy_val_0000.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "val"
+  },
+  {
+    "fichier": "healthy_val_0001.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "val"
+  },
+  {
+    "fichier": "healthy_val_0002.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "val"
+  },
+  {
+    "fichier": "mild_val_0002.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "val"
+  },
+  {
+    "fichier": "mild_val_0003.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "val"
+  },
+  {
+    "fichier": "mild_val_0004.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "val"
+  },
+  {
+    "fichier": "mild_val_0006.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "val"
+  },
+  {
+    "fichier": "mild_val_0008.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "val"
+  },
+  {
+    "fichier": "mild_val_0011.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "val"
+  },
+  {
+    "fichier": "mild_val_0014.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "val"
+  },
+  {
+    "fichier": "severe_val_0000.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "val"
+  },
+  {
+    "fichier": "severe_val_0001.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "val"
+  },
+  {
+    "fichier": "severe_val_0002.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "val"
+  },
+  {
+    "fichier": "healthy_test_0000.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "test"
+  },
+  {
+    "fichier": "healthy_test_0001.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "test"
+  },
+  {
+    "fichier": "healthy_test_0002.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "test"
+  },
+  {
+    "fichier": "healthy_test_0003.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "test"
+  },
+  {
+    "fichier": "healthy_test_0004.jpg",
+    "classe": "sain",
+    "severite": "healthy",
+    "source": "stock",
+    "split": "test"
+  },
+  {
+    "fichier": "mild_test_0001.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "mild_test_0002.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "mild_test_0005.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "mild_test_0006.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "mild_test_0007.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "mild_test_0010.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "mild_test_0011.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "mild_test_0012.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "mild_test_0013.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "mild_test_0015.png",
+    "classe": "malade",
+    "severite": "mild",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "moderate_test_0001.png",
+    "classe": "malade",
+    "severite": "moderate",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "severe_test_0000.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "severe_test_0001.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "severe_test_0002.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "severe_test_0003.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "test"
+  },
+  {
+    "fichier": "severe_test_0004.png",
+    "classe": "malade",
+    "severite": "severe",
+    "source": "pdf_clinique",
+    "split": "test"
+  }
+]

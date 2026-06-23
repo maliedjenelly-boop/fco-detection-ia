@@ -1,0 +1,29 @@
+# --- Caches Python ---
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# --- Gros jeux de données / images sources (inutiles à l'app déployée) ---
+fco_dataset_final/
+fco_dataset_binaire/
+images_animaux_sains/
+bluetongue_images_complete/
+Nouveau dossier/
+
+# --- Documents volumineux ---
+*.pdf
+*.pptx
+memoire/
+
+# --- Secrets locaux (ne JAMAIS committer) ---
+.streamlit/secrets.toml
+**/secrets.toml
+secrets.toml
+
+# --- Divers OS ---
+Thumbs.db
+.DS_Store
+
+# Conservés volontairement (nécessaires à l'app en ligne) :
+#   corrige/  · corrige/artifacts_lab/  · corrige/artifacts_image/
+#   corrige/assets/  · corrige/.streamlit/config.toml  · bdd/fco.db

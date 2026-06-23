@@ -1,0 +1,16 @@
+{
+  "regression": {
+    "r2_test": 0.151,
+    "permutation_importance": {
+      "sérotype (BTV8?)": 0.03,
+      "dpi": 0.25,
+      "essai": 0.017
+    }
+  },
+  "cross_trial": {
+    "chance_majorite": 0.508,
+    "intra_essais_melanges": 0.516,
+    "train_essai1_test_essai2": 0.504,
+    "train_essai2_test_essai1": 0.424
+  }
+}

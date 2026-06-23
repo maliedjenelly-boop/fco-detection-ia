@@ -1,0 +1,12 @@
+# Dépendances pour le DÉPLOIEMENT de l'application Streamlit (hébergement gratuit).
+# Volet image (EfficientNet/PyTorch) NON inclus ici : trop lourd pour le tier gratuit.
+# Il reste pleinement fonctionnel en local (cf. corrige/requirements.txt).
+streamlit>=1.30
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+joblib>=1.3
+plotly>=5.18
+Pillow>=10.0
+SQLAlchemy>=2.0
+PyMySQL>=1.1

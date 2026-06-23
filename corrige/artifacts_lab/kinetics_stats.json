@@ -1,0 +1,38 @@
+{
+  "BTV3_vs_BTV8_6dpi": {
+    "test": "Mann-Whitney U",
+    "U": 129737.5,
+    "p_value": 4.8527589184936245e-08,
+    "median_BTV3": 0.0,
+    "median_BTV8": 56.9,
+    "significatif_5pct": true
+  },
+  "kruskal_serotype_6dpi": {
+    "test": "Kruskal-Wallis",
+    "H": 29.775822061015578,
+    "p_value": 4.850030212801762e-08,
+    "significatif_5pct": true
+  },
+  "effet_dpi": {
+    "BTV3": {
+      "p_value": 1.0,
+      "median_0dpi": 44000.0,
+      "median_6dpi": 0.0,
+      "augmente_avec_dpi": false
+    },
+    "BTV8": {
+      "p_value": 1.0,
+      "median_0dpi": 143000.0,
+      "median_6dpi": 56.9,
+      "augmente_avec_dpi": false
+    }
+  },
+  "taux_detection_6dpi": {
+    "test": "Fisher exact",
+    "odds_ratio": 0.5105651982089384,
+    "p_value": 2.5796398458152348e-08,
+    "pct_detectable_BTV3": 39.0,
+    "pct_detectable_BTV8": 55.6,
+    "significatif_5pct": true
+  }
+}
