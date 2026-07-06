@@ -43,6 +43,8 @@ from sklearn.metrics import classification_report, confusion_matrix
 from torch.utils.data import DataLoader, WeightedRandomSampler
 from torchvision import datasets, transforms
 
+from image_preproc import CLAHE   # prétraitement : égalisation d'histogramme adaptative
+
 try:
     sys.stdout.reconfigure(encoding="utf-8")
 except Exception:
@@ -91,6 +93,7 @@ class BinaryFolder(datasets.ImageFolder):
 def build_transforms():
     """Augmentation modérée (dataset minuscule : on évite les transfos extrêmes)."""
     train_tf = transforms.Compose([
+        CLAHE(),  # égalisation d'histogramme adaptative (contraste homogène)
         transforms.Resize((IMG_SIZE + 32, IMG_SIZE + 32)),
         transforms.RandomResizedCrop(IMG_SIZE, scale=(0.7, 1.0)),
         transforms.RandomHorizontalFlip(),
@@ -100,6 +103,7 @@ def build_transforms():
         transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),
     ])
     eval_tf = transforms.Compose([
+        CLAHE(),  # même prétraitement à l'évaluation/inférence
         transforms.Resize((IMG_SIZE, IMG_SIZE)),
         transforms.ToTensor(),
         transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),
@@ -252,6 +256,7 @@ def main() -> None:
             "img_size": IMG_SIZE,
             "mean": IMAGENET_MEAN,
             "std": IMAGENET_STD,
+            "clahe": True,   # prétraitement CLAHE appliqué -> à refaire à l'inférence
             "task": "binary_healthy_vs_fco",
         },
         OUT_DIR / "fco_image_model.pth",

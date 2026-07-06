@@ -24,3 +24,4 @@ openpyxl>=3.1   # lecture/écriture XLSX pour la base de données
 torch>=2.0
 torchvision>=0.15
 timm>=0.9
+opencv-python-headless>=4.8   # prétraitement CLAHE (égalisation d'histogramme)

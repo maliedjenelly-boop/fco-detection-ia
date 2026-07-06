@@ -47,6 +47,8 @@ pip install -r requirements.txt
 python 01_train_lab_rf.py --csv "../01_BTV copy numbers midge.csv"
 
 # 2) Volet image — EfficientNet (torch requis ; défaut : ../fco_dataset_binaire)
+#    Prétraitement CLAHE (égalisation d'histogramme adaptative) appliqué avant l'entraînement
+#    et à l'inférence — cf. image_preproc.py.
 python 02_train_image_efficientnet.py --epochs 25
 
 # 3) Application web (4 pages : Accueil, Mode Laboratoire, Mode Éleveur, Contacts)

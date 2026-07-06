@@ -101,12 +101,16 @@ def load():
 
 def preprocess(pil_img, ckpt):
     from torchvision import transforms
+    pil_img = pil_img.convert("RGB")
+    if ckpt.get("clahe"):                       # cohérence avec l'entraînement
+        from image_preproc import apply_clahe
+        pil_img = apply_clahe(pil_img)
     tf = transforms.Compose([
         transforms.Resize((ckpt["img_size"], ckpt["img_size"])),
         transforms.ToTensor(),
         transforms.Normalize(ckpt["mean"], ckpt["std"]),
     ])
-    return tf(pil_img.convert("RGB")).unsqueeze(0)
+    return tf(pil_img).unsqueeze(0)
 
 
 def render(pil_img, cam, ckpt, label, conf, out_path):
