@@ -31,6 +31,9 @@ import plotly.graph_objects as go
 import streamlit as st
 from PIL import Image
 
+import assistant    # moteur d'assistants (chatbots hybrides : base de connaissances + LLM optionnel)
+import conseiller   # Mode Conseiller (tableau de bord, dossiers, synthèse)
+
 # Chemins ancrés sur l'emplacement du script -> fonctionne en local (depuis corrige/)
 # ET sur Streamlit Cloud (lancé depuis la racine du dépôt).
 BASE = Path(__file__).resolve().parent
@@ -806,7 +809,7 @@ def image_gradcam(bundle, pil_img: Image.Image):
     return Image.fromarray((overlay * 255).astype("uint8"))
 
 
-def page_image() -> None:
+def _eleveur_analyse() -> None:
     hero("Mode Éleveur",
          "Lecture des signes cliniques",
          "Téléversez une photo de l'animal. Le modèle indique « sain » ou "
@@ -837,6 +840,9 @@ def page_image() -> None:
         st.image(img, caption="Image analysée", use_container_width=True)
     with col2:
         res = predict_image(bundle, img)
+        # Mémorise le dernier résultat pour l'assistant (« explique mon résultat »).
+        st.session_state["eleveur_last_result"] = {
+            "label": res["label"], "confidence": res["confidence"]}
         verdict_card(res["label"], res["confidence"])
         st.write("")
         st.plotly_chart(confidence_gauge(res["confidence"], label_style(res["label"])["color"]),
@@ -859,6 +865,27 @@ def page_image() -> None:
                        "les lésions (museau, bouche, yeux), le verdict reflète surtout un biais de source.")
         except Exception as e:
             st.warning(f"Grad-CAM indisponible : {e}")
+
+
+def page_image() -> None:
+    """Mode Éleveur : l'analyse existante, puis l'assistant FCO (nouveau)."""
+    _eleveur_analyse()
+    st.divider()
+    st.markdown("### 🐑 Assistant FCO")
+    st.caption("Posez vos questions en langage simple : votre résultat, les symptômes, "
+               "la transmission, la prévention, quand appeler le vétérinaire…")
+    assistant.render_chat(
+        "eleveur",
+        suggestions=[
+            "Que signifie mon résultat ?",
+            "Quels sont les symptômes de la FCO ?",
+            "Comment la maladie se transmet-elle ?",
+            "Dois-je appeler mon vétérinaire ?",
+            "Comment protéger mon troupeau ?",
+            "Que veut dire le pourcentage de confiance ?",
+        ],
+        context={"last_result": st.session_state.get("eleveur_last_result")},
+        placeholder="Ex. : que signifie mon résultat ? quels sont les symptômes ?")
 
 
 def _contact_card(icon: str, title: str, subtitle: str, lines: list[str]) -> str:
@@ -1075,6 +1102,7 @@ def page_abonnements() -> None:
 PAGES = {"home": ("Accueil", "🏠", page_home),
          "lab": ("Mode Laboratoire", "🔬", page_lab),
          "image": ("Mode Éleveur", "🐑", page_image),
+         "conseiller": ("Mode Conseiller", "👨‍💼", conseiller.page_conseiller),
          "analyse": ("Analyse des données", "📊", page_analyse),
          "historique": ("Historique", "🕓", page_historique),
          "abonnements": ("Abonnements", "💳", page_abonnements),
@@ -1094,9 +1122,10 @@ def _hash_pw(pw: str) -> str:
 # Comptes de démonstration (mot de passe : fco2026). Surchargeables via
 # .streamlit/secrets.toml -> section [auth] (cf. secrets.toml.example).
 DEFAULT_USERS = {
-    "admin":   {"name": "Administrateur", "role": "admin",       "password_hash": _hash_pw("fco2026")},
-    "labo":    {"name": "Laboratoire",    "role": "laboratoire", "password_hash": _hash_pw("fco2026")},
-    "eleveur": {"name": "Éleveur",        "role": "eleveur",     "password_hash": _hash_pw("fco2026")},
+    "admin":      {"name": "Administrateur", "role": "admin",       "password_hash": _hash_pw("fco2026")},
+    "labo":       {"name": "Laboratoire",    "role": "laboratoire", "password_hash": _hash_pw("fco2026")},
+    "eleveur":    {"name": "Éleveur",        "role": "eleveur",     "password_hash": _hash_pw("fco2026")},
+    "conseiller": {"name": "Conseiller",     "role": "conseiller",  "password_hash": _hash_pw("fco2026")},
 }
 
 # Pages accessibles selon le rôle.
@@ -1104,6 +1133,7 @@ ROLE_PAGES = {
     "admin":       list(PAGES),
     "laboratoire": ["home", "lab", "analyse", "historique", "abonnements", "contacts"],
     "eleveur":     ["home", "image", "abonnements", "contacts"],
+    "conseiller":  ["home", "conseiller", "analyse", "historique", "contacts"],
 }
 
 
@@ -1148,7 +1178,8 @@ def login_page() -> None:
             else:
                 st.error("Identifiant ou mot de passe incorrect.")
         st.caption("Comptes de démonstration (mot de passe **fco2026**) : "
-                   "`admin` (tout), `labo` (laboratoire), `eleveur` (image).")
+                   "`admin` (tout), `labo` (laboratoire), `eleveur` (image), "
+                   "`conseiller` (suivi).")
 
 
 def sidebar() -> None:

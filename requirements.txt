@@ -10,3 +10,6 @@ plotly>=5.18
 Pillow>=10.0
 SQLAlchemy>=2.0
 PyMySQL>=1.1
+# Assistants IA (facultatif) : active le LLM Claude si une clé [anthropic] est
+# configurée. Sans clé, les assistants marchent avec leur base de connaissances.
+anthropic>=0.40

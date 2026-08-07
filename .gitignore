@@ -20,6 +20,9 @@ memoire/
 **/secrets.toml
 secrets.toml
 
+# --- Données mutables locales du Mode Conseiller (dossiers de suivi) ---
+bdd/conseiller.db
+
 # --- Divers OS ---
 Thumbs.db
 .DS_Store
