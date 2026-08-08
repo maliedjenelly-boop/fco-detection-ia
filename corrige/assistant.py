@@ -167,10 +167,10 @@ def answer_kb(role: str, question: str, context: dict | None = None) -> str:
         exp = _result_explanation(context)
         if exp:
             return exp + "\n\n" + DISCLAIMER
-    if role == "conseiller" and any(w in q for w in ["ce dossier", "résume-moi", "resume-moi", "résume ce", "resume ce"]):
-        summ = _dossier_summary(context)
-        if summ:
-            return summ
+    if role == "conseiller":
+        special = _conseiller_dispatch(question, context)
+        if special:
+            return special
     kb = KB_ELEVEUR if role == "eleveur" else KB_CONSEILLER
     hit = _kb_best(kb, question)
     if hit:
@@ -188,22 +188,55 @@ def answer_kb(role: str, question: str, context: dict | None = None) -> str:
             "métier, ou générer une checklist de suivi.")
 
 
-def _dossier_summary(context: dict | None) -> str | None:
-    d = (context or {}).get("dossier")
-    if not d:
-        return ("Aucun dossier n'est sélectionné. Ouvrez l'onglet « Dossiers / Suivi » "
-                "et choisissez un dossier, puis je pourrai vous le résumer.")
+def _summarize(d: dict) -> str:
     lignes = [f"**Synthèse du dossier — {d.get('client', 'sans nom')}**", ""]
     lignes.append(f"- Exploitation : {d.get('exploitation') or 'non renseignée'}")
     lignes.append(f"- Statut : {d.get('statut') or 'non défini'}")
     if d.get("notes"):
         lignes.append(f"- Notes : {d['notes']}")
-    manquants = _dossier_missing(d)
-    if manquants:
-        lignes.append(f"- Informations manquantes : {', '.join(manquants)}")
-    else:
-        lignes.append("- Informations manquantes : aucune apparente")
+    m = _dossier_missing(d)
+    lignes.append("- Informations manquantes : " + (", ".join(m) if m else "aucune apparente"))
     return "\n".join(lignes)
+
+
+def _dossier_summary(context: dict | None) -> str | None:
+    d = (context or {}).get("dossier")
+    return _summarize(d) if d else None
+
+
+def _find_dossier(context: dict | None, question: str):
+    """Retrouve un dossier dont le nom de client apparaît dans la question."""
+    q = question.lower()
+    for x in (context or {}).get("dossiers") or []:
+        name = str(x.get("client", "")).strip().lower()
+        if name and name in q:
+            return x
+    return None
+
+
+def _conseiller_dispatch(question: str, context: dict | None):
+    """Réponses métier structurées à partir des dossiers réels. None si aucune."""
+    ql = question.lower()
+    dossiers = (context or {}).get("dossiers") or []
+    if dossiers and any(w in ql for w in ["surveill", "attention", "prioritaire",
+                                          "nécessit", "necessit", "à traiter", "a traiter"]):
+        a = [x for x in dossiers if x.get("statut") in ("À analyser", "Informations manquantes")]
+        if a:
+            return ("Dossiers à surveiller en priorité :\n"
+                    + "\n".join(f"- **{x.get('client')}** — {x.get('statut')}" for x in a))
+        return ("Aucun dossier ne nécessite une attention particulière pour le moment "
+                "(aucun « À analyser » ni « Informations manquantes »).")
+    d = _find_dossier(context, question) or (context or {}).get("dossier")
+    if d:
+        if "statut" in ql:
+            return f"Statut du dossier **{d.get('client')}** : {d.get('statut', 'non défini')}."
+        if any(w in ql for w in ["manque", "manquant", "complét", "complet", "incomplet"]):
+            m = _dossier_missing(d)
+            return (f"Pour le dossier **{d.get('client')}**, il manque : " + ", ".join(m) + ".") \
+                if m else f"Le dossier **{d.get('client')}** ne présente pas d'information manquante apparente."
+        if any(w in ql for w in ["résume", "resume", "synthèse", "synthese", "ce dossier", "ce client"]):
+            return _summarize(d)
+    return None
 
 
 def _dossier_missing(d: dict) -> list[str]:
@@ -297,16 +330,28 @@ def _system_prompt(role: str, context: dict | None) -> str:
         "organisation). Tu n'es pas un outil de diagnostic vétérinaire : tu aides à "
         "centraliser l'information, préparer des synthèses et organiser le suivi.\n"
     )
-    ctx = ""
+    parts = []
     d = (context or {}).get("dossier")
     if d:
-        ctx = f"\nDossier sélectionné : {d}."
-    stats = (context or {}).get("stats")
-    if stats:
-        ctx += f"\nStatistiques disponibles dans la base : {stats}."
-    ctx += ("\nN'utilise QUE les données ci-dessus ; si une donnée demandée n'y figure "
-            "pas, indique qu'elle n'est pas disponible dans la base.")
-    return persona + ctx + "\n\n" + base_regles
+        parts.append(f"Dossier actuellement ouvert dans l'interface : {d}.")
+    dossiers = (context or {}).get("dossiers") or []
+    if dossiers:
+        lignes = []
+        for x in dossiers[:60]:
+            lignes.append(
+                f"- Client: {x.get('client')} | Exploitation: {x.get('exploitation') or '—'} "
+                f"| Statut: {x.get('statut')} | Notes: {x.get('notes') or '—'}")
+        parts.append("Dossiers présents dans la base (tu PEUX répondre à leur sujet, y "
+                     "compris si l'utilisateur nomme un client sans l'avoir ouvert) :\n"
+                     + "\n".join(lignes))
+    else:
+        parts.append("Aucun dossier n'est encore enregistré dans la base.")
+    ctx = "\n\n".join(parts)
+    ctx += ("\n\nRègles d'usage des données : réponds à partir de la liste ci-dessus. "
+            "Si un client demandé y figure, utilise ses informations (ne dis pas qu'il "
+            "est absent, ne réclame pas des données déjà présentes). S'il n'y figure "
+            "vraiment pas, indique clairement qu'il n'est pas dans la base.")
+    return persona + "\n\n" + ctx + "\n\n" + base_regles
 
 
 def _to_messages(history: list[dict]) -> list[dict]:

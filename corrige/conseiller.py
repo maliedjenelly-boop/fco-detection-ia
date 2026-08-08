@@ -226,13 +226,14 @@ def _dossiers(conn) -> None:
 def _assistant(conn) -> None:
     st.markdown("#### Assistant conseiller")
     dossier = st.session_state.get("cons_dossier_courant")
+    tous = list_dossiers(conn).to_dict("records")
     if dossier:
-        st.caption(f"Dossier en contexte : **{dossier['client']}** "
-                   f"({dossier.get('statut', '')}).")
+        st.caption(f"Dossier ouvert : **{dossier['client']}** ({dossier.get('statut', '')}). "
+                   f"L'assistant connaît aussi les **{len(tous)} dossiers** de la base.")
     else:
-        st.caption("Aucun dossier sélectionné — l'assistant répond de façon générale. "
-                   "Ouvrez un dossier dans l'onglet « Dossiers / Suivi » pour le résumer.")
-    context = {"dossier": dossier}
+        st.caption(f"L'assistant connaît les **{len(tous)} dossiers** de la base : "
+                   "vous pouvez l'interroger sur n'importe quel client en le nommant.")
+    context = {"dossier": dossier, "dossiers": tous}
     assistant.render_chat(
         "conseiller",
         suggestions=[
