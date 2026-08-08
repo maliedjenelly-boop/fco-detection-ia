@@ -130,33 +130,9 @@ def _kpi(value, label) -> str:
 
 
 # --------------------------------------------------------------------------- #
-#  Statistiques RÉELLES (base fco.db)                                          #
-# --------------------------------------------------------------------------- #
-@st.cache_data(show_spinner=False)
-def _fco_stats():
-    """Retourne un dict de stats réelles, ou None si la base est absente."""
-    if not FCO_DB.exists():
-        return None
-    try:
-        c = sqlite3.connect(str(FCO_DB))
-        n_mes = c.execute("SELECT COUNT(*) FROM mesure_virale").fetchone()[0]
-        n_inf = c.execute("SELECT COUNT(*) FROM mesure_virale WHERE detectable=1").fetchone()[0]
-        n_img = c.execute("SELECT COUNT(*) FROM image").fetchone()[0]
-        sero = dict(c.execute(
-            "SELECT s.code, COUNT(*) FROM mesure_virale m "
-            "JOIN serotype s ON s.id_serotype=m.id_serotype GROUP BY s.code").fetchall())
-        c.close()
-        return {"mesures": n_mes, "infectes": n_inf, "negatifs": n_mes - n_inf,
-                "images": n_img, "serotypes": sero}
-    except Exception:
-        return None
-
-
-# --------------------------------------------------------------------------- #
 #  A. Tableau de bord                                                          #
 # --------------------------------------------------------------------------- #
 def _dashboard(conn) -> None:
-    stats = _fco_stats()
     df = list_dossiers(conn)
 
     st.markdown("#### Suivi des dossiers")
@@ -181,23 +157,8 @@ def _dashboard(conn) -> None:
         st.dataframe(df[["client", "exploitation", "statut", "date_maj"]].head(5),
                      use_container_width=True, hide_index=True)
 
-    st.write("")
-    st.markdown("#### Données disponibles dans la base (analyses)")
-    if stats is None:
-        st.warning("La base d'analyses (`bdd/fco.db`) n'est pas disponible : les "
-                   "statistiques d'analyses ne peuvent pas être calculées.")
-        return
-    k1, k2, k3, k4 = st.columns(4)
-    k1.markdown(_kpi(f"{stats['mesures']:,}".replace(",", " "), "Mesures virales"), unsafe_allow_html=True)
-    taux = stats["infectes"] / stats["mesures"] if stats["mesures"] else 0
-    k2.markdown(_kpi(f"{taux:.0%}", "Taux de détection"), unsafe_allow_html=True)
-    k3.markdown(_kpi(stats["negatifs"], "Contrôles négatifs"), unsafe_allow_html=True)
-    k4.markdown(_kpi(stats["images"], "Images"), unsafe_allow_html=True)
-    if stats["serotypes"]:
-        st.markdown("**Répartition des mesures par sérotype**")
-        st.bar_chart(pd.Series(stats["serotypes"]).rename_axis("Sérotype").to_frame("Nombre"))
-    st.caption("Ces chiffres proviennent directement de la base du projet ; ils ne "
-               "sont pas simulés.")
+    st.caption("Astuce : l'analyse des données scientifiques (charge virale, "
+               "sérotypes, images) est disponible dans le volet « Analyse des données ».")
 
 
 # --------------------------------------------------------------------------- #
@@ -271,7 +232,7 @@ def _assistant(conn) -> None:
     else:
         st.caption("Aucun dossier sélectionné — l'assistant répond de façon générale. "
                    "Ouvrez un dossier dans l'onglet « Dossiers / Suivi » pour le résumer.")
-    context = {"dossier": dossier, "stats": _fco_stats()}
+    context = {"dossier": dossier}
     assistant.render_chat(
         "conseiller",
         suggestions=[
