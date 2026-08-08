@@ -242,7 +242,7 @@ def _assistant(conn) -> None:
             "Prépare une synthèse avant mon rendez-vous.",
             "Quels dossiers nécessitent une attention particulière ?",
             "Génère une checklist d'accompagnement.",
-            "Explique le résultat en langage métier.",
+            "Quel est le statut de ce client ?",
         ],
         context=context,
         placeholder="Ex. : résume-moi ce dossier, quelles infos manquent…")
