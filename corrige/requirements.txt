@@ -20,9 +20,10 @@ SQLAlchemy>=2.0
 PyMySQL>=1.1
 openpyxl>=3.1   # lecture/écriture XLSX pour la base de données
 
-# Assistants IA (facultatif) : LLM Claude si une clé [anthropic] est configurée
-# (sinon base de connaissances, aucune clé requise).
-anthropic>=0.40
+# Assistants IA (facultatif) : LLM Gemini si une clé [gemini] est configurée
+# (offre gratuite). Sinon base de connaissances, aucune clé requise.
+# (Alternative Claude : `pip install anthropic` + clé [anthropic].)
+google-genai>=1.0
 
 # Volet image (transfer learning) — installer en plus pour 02_train_image_efficientnet.py
 torch>=2.0

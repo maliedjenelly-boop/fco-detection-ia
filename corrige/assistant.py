@@ -20,9 +20,11 @@ from __future__ import annotations
 import re
 import streamlit as st
 
-# Modèle par défaut (surchageable via [anthropic] model = "..."). Voir la doc
-# officielle : claude-opus-5 est le modèle courant recommandé.
-DEFAULT_MODEL = "claude-opus-5"
+# Modèles par défaut (surchargeables via `model = "..."` dans secrets.toml).
+# Gemini est le fournisseur privilégié (offre gratuite via Google AI Studio).
+# Anthropic Claude reste pris en charge si une clé [anthropic] est fournie.
+DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
+DEFAULT_ANTHROPIC_MODEL = "claude-opus-5"
 
 DISCLAIMER = ("Rappel : cet outil est une **aide à la décision**. Il ne remplace "
               "pas l'avis d'un vétérinaire ni une confirmation de laboratoire.")
@@ -218,20 +220,44 @@ def _dossier_missing(d: dict) -> list[str]:
 # --------------------------------------------------------------------------- #
 #  BRANCHE LLM (optionnelle)                                                   #
 # --------------------------------------------------------------------------- #
+def _placeholder(key: str) -> bool:
+    """Vrai si la clé est vide ou reste un placeholder du fichier d'exemple."""
+    if not key:
+        return True
+    up = key.upper()
+    return "COLLEZ" in up or "VOTRE_CLE" in up or "VOTRE_CLÉ" in up
+
+
 def _llm_config():
-    """Renvoie (api_key, model) si un LLM est configuré, sinon (None, None)."""
+    """Renvoie (provider, api_key, model) ou (None, None, None).
+
+    Ordre de priorité : Gemini (gratuit) puis Anthropic Claude.
+    """
     try:
-        conf = st.secrets["anthropic"]
-        key = conf.get("api_key")
-        if not key:
-            return None, None
-        return key, conf.get("model", DEFAULT_MODEL)
+        g = st.secrets["gemini"]
+        k = g.get("api_key")
+        if not _placeholder(k):
+            return "gemini", k, g.get("model", DEFAULT_GEMINI_MODEL)
     except Exception:
-        return None, None
+        pass
+    try:
+        a = st.secrets["anthropic"]
+        k = a.get("api_key")
+        if not _placeholder(k):
+            return "anthropic", k, a.get("model", DEFAULT_ANTHROPIC_MODEL)
+    except Exception:
+        pass
+    return None, None, None
 
 
 def llm_available() -> bool:
     return _llm_config()[0] is not None
+
+
+def _llm_label() -> str:
+    provider = _llm_config()[0]
+    return {"gemini": "IA activée (Gemini)",
+            "anthropic": "IA activée (Claude)"}.get(provider, "base de connaissances")
 
 
 def _system_prompt(role: str, context: dict | None) -> str:
@@ -293,15 +319,46 @@ def _to_messages(history: list[dict]) -> list[dict]:
 
 
 def stream_llm(role: str, history: list[dict], context: dict | None):
-    """Générateur de texte via Claude. Repli silencieux géré par l'appelant."""
-    key, model = _llm_config()
-    import anthropic  # import différé : dépendance optionnelle
+    """Générateur de texte via le LLM configuré. Repli géré par l'appelant."""
+    provider, key, model = _llm_config()
+    if provider == "gemini":
+        yield from _stream_gemini(key, model, role, history, context)
+    elif provider == "anthropic":
+        yield from _stream_anthropic(key, model, role, history, context)
+
+
+def _stream_gemini(key, model, role, history, context):
+    from google import genai            # import différé : dépendance optionnelle
+    from google.genai import types
+    client = genai.Client(api_key=key)
+    # Gemini attend les rôles "user" / "model" (l'assistant = "model").
+    contents = [{"role": "model" if m["role"] == "assistant" else "user",
+                 "parts": [{"text": m["content"]}]}
+                for m in history if m["role"] in ("user", "assistant")]
+    # thinking_budget=0 : réponse directe (pas de réflexion invisible qui
+    # consommerait le budget de tokens sur les modèles Gemini "2.5").
+    try:
+        thinking = types.ThinkingConfig(thinking_budget=0)
+    except Exception:
+        thinking = None
+    cfg = types.GenerateContentConfig(
+        system_instruction=_system_prompt(role, context),
+        max_output_tokens=1024,
+        thinking_config=thinking)
+    for chunk in client.models.generate_content_stream(
+            model=model, contents=contents, config=cfg):
+        text = getattr(chunk, "text", None)
+        if text:
+            yield text
+
+
+def _stream_anthropic(key, model, role, history, context):
+    import anthropic                     # import différé : dépendance optionnelle
     client = anthropic.Anthropic(api_key=key)
     with client.messages.stream(
         model=model,
         max_tokens=1024,
         system=_system_prompt(role, context),
-        output_config={"effort": "low"},
         messages=_to_messages(history),
     ) as stream:
         for text in stream.text_stream:
@@ -320,8 +377,7 @@ def render_chat(role: str, suggestions: list[str], context: dict | None = None,
     if top[0].button("🔄 Nouvelle conversation", key=f"new_{role}"):
         st.session_state[key] = []
         st.rerun()
-    top[1].caption("Assistant · " + ("IA activée (Claude)" if llm_available()
-                                     else "base de connaissances"))
+    top[1].caption("Assistant · " + _llm_label())
 
     # questions suggérées
     clicked = None

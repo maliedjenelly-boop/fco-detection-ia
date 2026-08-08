@@ -77,6 +77,46 @@ def update_dossier(conn, did, client, exploitation, statut, notes) -> None:
     conn.commit()
 
 
+# Jeu de dossiers de DÉMONSTRATION (fictifs, pour illustrer l'outil en soutenance).
+# Noms d'exploitations volontairement génériques : aucune donnée réelle.
+# Format : (client, exploitation, statut, notes, jours_anciennete)
+DEMO_DOSSIERS = [
+    ("GAEC des Trois Chênes", "Élevage ovin — Aube", "Prêt pour accompagnement",
+     "3 brebis avec charge virale positive confirmée au laboratoire. Vaccination "
+     "du troupeau à planifier avec le vétérinaire.", 2),
+    ("EARL du Val Fleuri", "Bovins lait — Marne", "En cours",
+     "Photo analysée : signes suspects de FCO. Vétérinaire contacté, en attente "
+     "de confirmation qPCR.", 3),
+    ("Ferme de la Prairie", "Ovins & caprins — Haute-Marne", "Informations manquantes",
+     "Il manque les résultats de laboratoire et le nombre exact d'animaux concernés.", 5),
+    ("SCEA du Grand Pré", "Bovins viande — Aube", "À analyser",
+     "Nouvel adhérent, premier signalement. Dossier à instruire.", 1),
+    ("GAEC de la Fontaine", "Ovins — Marne", "Clôturé",
+     "Contrôle négatif confirmé au laboratoire. Aucune suite. Dossier clos.", 12),
+    ("EARL des Coteaux", "Bovins mixte — Ardennes", "En cours",
+     "Suivi post-vaccination du troupeau. Rien à signaler pour l'instant.", 7),
+    ("Élevage Martin", "Ovins — Aube", "Informations manquantes",
+     "Photos floues à reprendre. Coordonnées du vétérinaire sanitaire à confirmer.", 9),
+]
+
+
+def seed_demo(conn) -> int:
+    """Insère les dossiers de démonstration absents (idempotent). Renvoie le nombre ajouté."""
+    existants = set(pd.read_sql_query("SELECT client FROM dossier_suivi", conn)["client"])
+    ajoutes = 0
+    for client, exploitation, statut, notes, jours in DEMO_DOSSIERS:
+        if client in existants:
+            continue
+        d = (_dt.datetime.now() - _dt.timedelta(days=jours)).strftime("%Y-%m-%d %H:%M")
+        conn.execute(
+            "INSERT INTO dossier_suivi (client, exploitation, statut, notes, "
+            "date_creation, date_maj) VALUES (?,?,?,?,?,?)",
+            (client, exploitation, statut, notes, d, d))
+        ajoutes += 1
+    conn.commit()
+    return ajoutes
+
+
 # --------------------------------------------------------------------------- #
 #  Petits helpers de rendu (réutilisent le CSS global)                        #
 # --------------------------------------------------------------------------- #
@@ -167,6 +207,14 @@ def _dossiers(conn) -> None:
     st.markdown("#### Dossiers de suivi")
     st.caption("Les dossiers sont stockés dans une base dédiée (`conseiller.db`), "
                "sans modifier les données d'analyses existantes.")
+
+    d1, d2 = st.columns([1.4, 3])
+    if d1.button("🧪 Charger des dossiers de démonstration", use_container_width=True):
+        n = seed_demo(conn)
+        st.success(f"{n} dossier(s) de démonstration ajouté(s).") if n else \
+            st.info("Les dossiers de démonstration sont déjà présents.")
+        st.rerun()
+    d2.caption("Exemples **fictifs** pour illustrer l'outil (aucune donnée réelle).")
 
     df = list_dossiers(conn)
     options = ["➕ Nouveau dossier"] + [
