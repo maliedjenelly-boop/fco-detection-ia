@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# © 2025-2026 MALIEDJE Nelly Leaticia — Tous droits réservés.
+# Projet FCO Studio — thèse Mastère Data & IA (RNCP 37137).
+# Usage non commercial uniquement. Voir LICENCE.md.
 """
 CLASSIFICATION BINAIRE — culicoïde infecté (détectable) vs non détecté.
 
@@ -93,12 +96,20 @@ def plot_distribution(df):
 
 
 def plot_roc(models, X_test, y_test):
+    # Styles distincts : Random Forest et XGBoost ont des courbes quasi identiques,
+    # on les distingue par le trait (RF pointillé) pour que les deux restent visibles.
+    styles = {
+        "Logistic Regression": dict(color="#2563EB", linestyle="-",  lw=2.2, zorder=2),
+        "Random Forest":       dict(color="#F59E0B", linestyle="--", lw=3.0, zorder=4),
+        "XGBoost":             dict(color="#10B981", linestyle="-",  lw=2.2, zorder=3),
+    }
     fig, ax = plt.subplots(figsize=(6, 5.5))
     for name, m in models.items():
         proba = m.predict_proba(X_test)[:, 1]
         fpr, tpr, _ = roc_curve(y_test, proba)
-        ax.plot(fpr, tpr, lw=2, label=f"{name} (AUC={roc_auc_score(y_test, proba):.3f})")
-    ax.plot([0, 1], [0, 1], "--", color="grey", lw=1)
+        st = styles.get(name, dict(lw=2.2))
+        ax.plot(fpr, tpr, label=f"{name} (AUC={roc_auc_score(y_test, proba):.2f})", **st)
+    ax.plot([0, 1], [0, 1], "--", color="grey", lw=1, zorder=1)
     ax.set_xlabel("Taux de faux positifs"); ax.set_ylabel("Taux de vrais positifs")
     ax.set_title("Courbes ROC"); ax.legend(loc="lower right")
     fig.tight_layout(); fig.savefig(OUT / "roc_curves.png", dpi=150); plt.close(fig)

@@ -1,3 +1,6 @@
+# © 2025-2026 MALIEDJE Nelly Leaticia — Tous droits réservés.
+# Projet FCO Studio — thèse Mastère Data & IA (RNCP 37137).
+# Usage non commercial uniquement. Voir LICENCE.md.
 """
 VOLET IMAGE — Transfer learning EfficientNet-B0 propre (PyTorch + timm).
 
