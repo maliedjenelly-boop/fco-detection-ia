@@ -119,3 +119,10 @@ conforme au guide) et `Livrable_technique_FCO.zip` (code + dump SQL + configs).
    surtout ce biais, pas une reconnaissance des lésions.
 3. **Détectable ≠ infecté** : un animal ayant éliminé le virus est légitimement « non détecté ».
 4. Dataset image **très petit** ; performances à interpréter avec prudence.
+
+
+## Licence
+
+© 2025-2026 MALIEDJE Nelly Leaticia — **Tous droits réservés**.
+
+Projet publié à des fins de consultation et d'évaluation académique (thèse Mastère Data & IA, RNCP 37137). **Toute exploitation commerciale ou à des fins lucratives est interdite** sans autorisation écrite préalable de l'autrice. Toute utilisation non autorisée constitue une contrefaçon (art. L.335-2 du Code de la propriété intellectuelle) et pourra donner lieu à des poursuites. Voir [LICENCE.md](../LICENCE.md).
