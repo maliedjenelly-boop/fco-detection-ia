@@ -31,6 +31,7 @@ import assistant
 BASE = Path(__file__).resolve().parent
 FCO_DB = BASE.parent / "bdd" / "fco.db"
 CONSEIL_DB = BASE.parent / "bdd" / "conseiller.db"
+CONSEIL_BANNER = BASE / "assets" / "conseiller_banner.jpg"
 
 STATUTS = ["À analyser", "En cours", "Informations manquantes",
            "Prêt pour accompagnement", "Clôturé"]
@@ -307,6 +308,9 @@ def page_conseiller() -> None:
           "Suivi & accompagnement des éleveurs",
           "Centralisez les informations, suivez les dossiers, préparez vos synthèses. "
           "Outil métier d'aide à la décision — pas un diagnostic vétérinaire.")
+    if CONSEIL_BANNER.exists():                       # visuel du Mode Conseiller
+        _c1, _c2, _c3 = st.columns([1, 2, 1])
+        _c2.image(str(CONSEIL_BANNER), use_container_width=True)
     conn = _conseil_conn()
     t1, t2, t3, t4 = st.tabs(
         ["📊 Tableau de bord", "🗂️ Dossiers / Suivi", "💬 Assistant", "📝 Synthèse"])
