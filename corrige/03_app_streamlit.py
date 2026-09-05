@@ -1157,8 +1157,10 @@ def check_login(username: str, password: str):
          (u.get("password") is not None and u.get("password") == password)
     if not ok:
         return None
+    # Sécurité : à défaut de rôle explicite, on attribue le rôle le PLUS restreint
+    # (jamais "admin" par défaut, pour éviter une élévation de privilèges).
     return {"username": (username or "").strip().lower(),
-            "name": u.get("name", username), "role": u.get("role", "admin")}
+            "name": u.get("name", username), "role": u.get("role", "eleveur")}
 
 
 def login_page() -> None:
@@ -1187,7 +1189,8 @@ def login_page() -> None:
 
 def sidebar() -> None:
     auth = st.session_state.get("auth", {})
-    allowed = ROLE_PAGES.get(auth.get("role", "admin"), list(PAGES))
+    # Fail-closed : un rôle inconnu ne donne accès qu'au strict minimum.
+    allowed = ROLE_PAGES.get(auth.get("role"), ["home", "contacts"])
     with st.sidebar:
         st.markdown(
             """<div class="brand"><div class="logo">🐑</div>
@@ -1222,8 +1225,8 @@ def main() -> None:
         login_page()
         return
     sidebar()
-    allowed = ROLE_PAGES.get(st.session_state["auth"]["role"], list(PAGES))
-    if st.session_state.page not in allowed:    # garde-fou d'accès par rôle
+    allowed = ROLE_PAGES.get(st.session_state["auth"]["role"], ["home", "contacts"])
+    if st.session_state.page not in allowed:    # garde-fou d'accès par rôle (fail-closed)
         st.session_state.page = "home"
     PAGES[st.session_state.page][2]()
 
