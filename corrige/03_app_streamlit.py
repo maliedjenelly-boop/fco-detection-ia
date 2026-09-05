@@ -609,34 +609,54 @@ def page_home() -> None:
          "et lecture des signes cliniques sur image. Conçu comme un outil d'aide à la "
          "décision, transparent sur ses limites.")
 
+    # Accès selon le rôle connecté : on n'affiche QUE les modes autorisés.
+    role = st.session_state.get("auth", {}).get("role", "")
+    allowed = ROLE_PAGES.get(role, ["home", "contacts"])
+
     lab_ok = load_lab_model() is not None
     img_state = load_image_model()
     img_ok = isinstance(img_state, dict)
-    st.markdown(
-        status_pill(f"Mode Laboratoire — {'opérationnel' if lab_ok else 'manquant'}", lab_ok)
-        + "&nbsp;&nbsp;"
-        + status_pill(f"Mode Éleveur — {'opérationnel' if img_ok else 'à entraîner'}", img_ok),
-        unsafe_allow_html=True,
-    )
-    st.write("")
 
-    c1, c2 = st.columns(2, gap="large")
-    with c1:
-        st.markdown(image_card(
-            LABO_BANNER, "ico-indigo", "🔬", "Mode Laboratoire",
+    # Statuts : uniquement les modèles pertinents pour ce rôle
+    pills = []
+    if "lab" in allowed:
+        pills.append(status_pill(
+            f"Mode Laboratoire — {'opérationnel' if lab_ok else 'manquant'}", lab_ok))
+    if "image" in allowed:
+        pills.append(status_pill(
+            f"Mode Éleveur — {'opérationnel' if img_ok else 'à entraîner'}", img_ok))
+    if pills:
+        st.markdown("&nbsp;&nbsp;".join(pills), unsafe_allow_html=True)
+        st.write("")
+
+    # Cartes d'accès : une par mode autorisé
+    cards = []
+    if "lab" in allowed:
+        cards.append((LABO_BANNER, "ico-indigo", "🔬", "Mode Laboratoire",
             "À partir de la charge virale (copies génomiques + DPI), estime si "
             "l'échantillon est <b>infecté</b> ou <b>négatif</b>. Import CSV ou saisie "
-            "manuelle, résultats instantanés."), unsafe_allow_html=True)
-        st.button("Ouvrir le Mode Laboratoire  →", key="go_lab",
-                  on_click=lambda: st.session_state.update(page="lab"))
-    with c2:
-        st.markdown(image_card(
-            ELEVEUR_BANNER, "ico-teal", "🐑", "Mode Éleveur",
+            "manuelle, résultats instantanés.",
+            "Ouvrir le Mode Laboratoire  →", "go_lab", "lab"))
+    if "image" in allowed:
+        cards.append((ELEVEUR_BANNER, "ico-teal", "🐑", "Mode Éleveur",
             "Une photo de l'animal suffit : EfficientNet estime <b>sain</b> vs "
             "<b>signes suspects de FCO</b>, avec le niveau de confiance et les "
-            "probabilités détaillées."), unsafe_allow_html=True)
-        st.button("Ouvrir le Mode Éleveur  →", key="go_img",
-                  on_click=lambda: st.session_state.update(page="image"))
+            "probabilités détaillées.",
+            "Ouvrir le Mode Éleveur  →", "go_img", "image"))
+    if "conseiller" in allowed:
+        cards.append((ELEVEUR_BANNER, "ico-indigo", "👨‍💼", "Mode Conseiller",
+            "Suivi des dossiers des éleveurs : tableau de bord, statuts, synthèses "
+            "exportables et assistant métier. Outil d'accompagnement, pas un diagnostic.",
+            "Ouvrir le Mode Conseiller  →", "go_cons", "conseiller"))
+
+    if cards:
+        cols = st.columns(len(cards), gap="large")
+        for col, (banner, ico, emoji, title, desc, btn, key, pk) in zip(cols, cards):
+            with col:
+                st.markdown(image_card(banner, ico, emoji, title, desc),
+                            unsafe_allow_html=True)
+                st.button(btn, key=key,
+                          on_click=lambda p=pk: st.session_state.update(page=p))
 
     st.write("")
     st.markdown("#### Le pipeline en bref")
