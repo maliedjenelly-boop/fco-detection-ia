@@ -45,6 +45,7 @@ IMG_MODEL = BASE / "artifacts_image" / "fco_image_model.pth"
 LAB_DB = BASE.parent / "bdd" / "fco.db"            # base de données du projet (bdd/)
 LABO_BANNER = BASE / "assets" / "labo_banner.jpg"       # visuel page Mode Laboratoire
 ELEVEUR_BANNER = BASE / "assets" / "eleveur_banner.jpg" # visuel page Mode Éleveur
+CONSEIL_BANNER = BASE / "assets" / "conseiller_banner.jpg"  # visuel Mode Conseiller
 
 st.set_page_config(page_title="FCO Studio — Surveillance", page_icon="🐑",
                    layout="wide", initial_sidebar_state="expanded")
@@ -276,12 +277,16 @@ def page_banner(path: Path) -> None:
     )
 
 
-def image_card(img_path: Path, ico_class: str, icon: str, title: str, body: str) -> str:
-    """Carte d'accueil avec une image réaliste en en-tête."""
+def image_card(img_path: Path, ico_class: str, icon: str, title: str, body: str,
+               fit: str = "cover") -> str:
+    """Carte d'accueil avec une image en en-tête.
+    fit='cover' pour une photo (remplit), fit='contain' pour une illustration
+    (affichée en entier, sur fond clair)."""
     head = ""
     if Path(img_path).exists():
+        bg = "background:#F1F5F9;" if fit == "contain" else ""
         head = (f'<img src="data:image/jpeg;base64,{_img_b64(str(img_path))}" '
-                f'style="width:100%;height:140px;object-fit:cover;display:block;"/>')
+                f'style="width:100%;height:140px;object-fit:{fit};{bg}display:block;"/>')
     return (f'<div class="card" style="padding:0;overflow:hidden;">{head}'
             f'<div style="padding:1.2rem 1.5rem 1.4rem;"><div class="ico {ico_class}">{icon}</div>'
             f'<h3>{title}</h3><p>{body}</p></div></div>')
@@ -636,24 +641,24 @@ def page_home() -> None:
             "À partir de la charge virale (copies génomiques + DPI), estime si "
             "l'échantillon est <b>infecté</b> ou <b>négatif</b>. Import CSV ou saisie "
             "manuelle, résultats instantanés.",
-            "Ouvrir le Mode Laboratoire  →", "go_lab", "lab"))
+            "Ouvrir le Mode Laboratoire  →", "go_lab", "lab", "cover"))
     if "image" in allowed:
         cards.append((ELEVEUR_BANNER, "ico-teal", "🐑", "Mode Éleveur",
             "Une photo de l'animal suffit : EfficientNet estime <b>sain</b> vs "
             "<b>signes suspects de FCO</b>, avec le niveau de confiance et les "
             "probabilités détaillées.",
-            "Ouvrir le Mode Éleveur  →", "go_img", "image"))
+            "Ouvrir le Mode Éleveur  →", "go_img", "image", "cover"))
     if "conseiller" in allowed:
-        cards.append((ELEVEUR_BANNER, "ico-indigo", "👨‍💼", "Mode Conseiller",
+        cards.append((CONSEIL_BANNER, "ico-indigo", "👨‍💼", "Mode Conseiller",
             "Suivi des dossiers des éleveurs : tableau de bord, statuts, synthèses "
             "exportables et assistant métier. Outil d'accompagnement, pas un diagnostic.",
-            "Ouvrir le Mode Conseiller  →", "go_cons", "conseiller"))
+            "Ouvrir le Mode Conseiller  →", "go_cons", "conseiller", "contain"))
 
     if cards:
         cols = st.columns(len(cards), gap="large")
-        for col, (banner, ico, emoji, title, desc, btn, key, pk) in zip(cols, cards):
+        for col, (banner, ico, emoji, title, desc, btn, key, pk, fit) in zip(cols, cards):
             with col:
-                st.markdown(image_card(banner, ico, emoji, title, desc),
+                st.markdown(image_card(banner, ico, emoji, title, desc, fit),
                             unsafe_allow_html=True)
                 st.button(btn, key=key,
                           on_click=lambda p=pk: st.session_state.update(page=p))
