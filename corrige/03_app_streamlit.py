@@ -1141,12 +1141,19 @@ ROLE_PAGES = {
 
 
 def _get_users() -> dict:
-    """Utilisateurs depuis .streamlit/secrets.toml [auth], sinon comptes démo."""
+    """Comptes = comptes de démonstration (rôles corrects) + éventuels comptes
+    définis dans .streamlit/secrets.toml [auth].
+
+    Les comptes de démo (admin / labo / eleveur / conseiller) restent TOUJOURS
+    disponibles avec leur rôle, pour que l'accès par rôle fonctionne même si le
+    fichier secrets est absent ou mal configuré (chaque mode a ainsi sa connexion)."""
+    users = {k: dict(v) for k, v in DEFAULT_USERS.items()}
     try:
-        users = {u: dict(v) for u, v in st.secrets["auth"].items()}
-        return users or DEFAULT_USERS
+        for u, v in st.secrets["auth"].items():
+            users[str(u).strip().lower()] = dict(v)
     except Exception:
-        return DEFAULT_USERS
+        pass
+    return users
 
 
 def check_login(username: str, password: str):
